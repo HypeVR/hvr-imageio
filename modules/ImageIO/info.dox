@@ -1,0 +1,5 @@
+/*!
+  \addtogroup ImageIO ImageIO
+
+  The \b ImageIO modules contains a C++ classes for handling image io
+*/
