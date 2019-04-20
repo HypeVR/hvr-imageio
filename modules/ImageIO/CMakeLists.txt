@@ -63,4 +63,5 @@ export(TARGETS ${PROJECT_NAME}
        FILE ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Targets.cmake)
 
 file(APPEND ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake
+            "find_dependency(exiv2 REQUIRED)\n"
             "find_dependency(OpenCV REQUIRED)\n")
