@@ -14,6 +14,9 @@ namespace hvr
 {
 namespace ImageIO
 {
+HVR_IMAGEIO_DLL bool ReadExiv(const std::string &inp_file,
+                              std::map<std::string, std::string> &exiv_data);
+
 HVR_IMAGEIO_DLL cv::Mat ReadImageExiv(
     const std::string &inp_file,
     const int &imread_flag,

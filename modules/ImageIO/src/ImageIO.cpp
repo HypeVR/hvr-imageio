@@ -11,12 +11,9 @@ namespace hvr
 {
 namespace ImageIO
 {
-cv::Mat ReadImageExiv(const std::string &inp_file,
-                      const int &imread_flag,
-                      std::map<std::string, std::string> &exiv_data)
+bool ReadExiv(const std::string &inp_file,
+              std::map<std::string, std::string> &exiv_data)
 {
-  cv::Mat img = cv::imread(inp_file, imread_flag);
-
   // Read exiv metadata
   Exiv2::Image::UniquePtr exiv_img = Exiv2::ImageFactory::open(inp_file);
   exiv_img->readMetadata();
@@ -29,6 +26,16 @@ cv::Mat ReadImageExiv(const std::string &inp_file,
     exiv_data.insert(
         std::pair<std::string, std::string>(it->key(), it->value().toString()));
   }
+
+  return true;
+}
+cv::Mat ReadImageExiv(const std::string &inp_file,
+                      const int &imread_flag,
+                      std::map<std::string, std::string> &exiv_data)
+{
+  cv::Mat img = cv::imread(inp_file, imread_flag);
+
+  ReadExiv(inp_file, exiv_data);
 
   return img;
 }
