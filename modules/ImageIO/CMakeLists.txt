@@ -9,47 +9,45 @@ if(MSVC)
   set(ENABLE "__pragma(warning(pop))")
 endif()
 
-set(PROJECT_SRCS
-${PROJECT_SOURCE_DIR}/src/ImageIO.cpp
-)
+set(PROJECT_SRCS ${PROJECT_SOURCE_DIR}/src/ImageIO.cpp)
 
-set(PROJECT_INCS
-${PROJECT_SOURCE_DIR}/include/Hvr/ImageIO/ImageIO.h
-)
+set(PROJECT_INCS ${PROJECT_SOURCE_DIR}/include/Hvr/ImageIO/ImageIO.h)
 
-set(PROJECT_INFO
-${PROJECT_SOURCE_DIR}/info.dox
-)
+set(PROJECT_INFO ${PROJECT_SOURCE_DIR}/info.dox)
 
 source_group("include" FILES ${PROJECT_INCS})
-source_group("src"     FILES ${PROJECT_SRCS})
+source_group("src" FILES ${PROJECT_SRCS})
 
-find_package( OpenCV REQUIRED )
+find_package(OpenCV REQUIRED)
+find_package(exiv2 REQUIRED)
 
-add_library(${PROJECT_NAME} SHARED ${PROJECT_SRCS}
-                                  ${PROJECT_INCS}
-                                  ${PROJECT_INFO})
+add_library(${PROJECT_NAME}
+            SHARED
+            ${PROJECT_SRCS}
+            ${PROJECT_INCS}
+            ${PROJECT_INFO})
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_14)
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC
-                          HVR_WINDOWS_DISABLE_ALL_WARNING=${DISABLE}
-                          HVR_WINDOWS_ENABLE_ALL_WARNING=${ENABLE})
+target_compile_definitions(${PROJECT_NAME}
+                           PUBLIC
+                           HVR_WINDOWS_DISABLE_ALL_WARNING=${DISABLE}
+                           HVR_WINDOWS_ENABLE_ALL_WARNING=${ENABLE})
 
 target_compile_definitions(${PROJECT_NAME} INTERFACE
-                          HVR_IMAGEIO_DLL=${DLLIMPORT})
+                           HVR_IMAGEIO_DLL=${DLLIMPORT})
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE
-                          HVR_IMAGEIO_DLL=${DLLEXPORT})
+target_compile_definitions(${PROJECT_NAME} PRIVATE HVR_IMAGEIO_DLL=${DLLEXPORT})
 
-target_include_directories(${PROJECT_NAME} PUBLIC
-                          $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-                          $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>)
+target_include_directories(
+  ${PROJECT_NAME}
+  PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+         $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>)
 
-target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
+target_link_libraries(${PROJECT_NAME} exiv2lib ${OpenCV_LIBS})
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY
-            FOLDER ${CMAKE_PROJECT_NAME}/modules)
+set_property(TARGET ${PROJECT_NAME}
+             PROPERTY FOLDER ${CMAKE_PROJECT_NAME}/modules)
 
 install(TARGETS ${PROJECT_NAME}
         EXPORT ${CMAKE_PROJECT_NAME}Targets
@@ -61,7 +59,8 @@ install(FILES ${PROJECT_SOURCE_DIR}/include/Hvr/ImageIO/ImageIO.h
         DESTINATION include/Hvr/ImageIO)
 
 export(TARGETS ${PROJECT_NAME}
-      APPEND FILE ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Targets.cmake)
+       APPEND
+       FILE ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Targets.cmake)
 
 file(APPEND ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake
-    "find_dependency(OpenCV REQUIRED)\n")
+            "find_dependency(OpenCV REQUIRED)\n")
