@@ -11,7 +11,7 @@ namespace hvr
 {
 cv::Mat ReadImageExiv(const std::string &inp_file,
                       const int &imread_flag,
-                      std::map<std::string, std::string> exiv_data)
+                      std::map<std::string, std::string> &exiv_data)
 {
   cv::Mat img = cv::imread(inp_file, imread_flag);
 
@@ -33,7 +33,7 @@ cv::Mat ReadImageExiv(const std::string &inp_file,
 
 bool WriteImageExiv(const std::string &out_file,
                     const cv::Mat &img,
-                    std::map<std::string, std::string> exiv_data)
+                    const std::map<std::string, std::string> &exiv_data)
 {
   // This will get the file extension from the out file
   std::string file_ext = out_file.substr(out_file.find('.'), out_file.size());
