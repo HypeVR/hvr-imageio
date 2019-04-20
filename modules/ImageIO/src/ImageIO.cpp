@@ -9,6 +9,8 @@ HVR_WINDOWS_ENABLE_ALL_WARNING
 
 namespace hvr
 {
+namespace ImageIO
+{
 cv::Mat ReadImageExiv(const std::string &inp_file,
                       const int &imread_flag,
                       std::map<std::string, std::string> &exiv_data)
@@ -78,5 +80,5 @@ bool WriteImageExiv(const std::string &out_file,
 
   return true;
 }
-
+}  // namespace ImageIO
 }  // namespace hvr
