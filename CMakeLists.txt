@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.11)
 
 if(WIN32)
   set(CMAKE_TOOLCHAIN_FILE $ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
-                           CACHE STRING "")
+      CACHE STRING "")
   set(VCPKG_TARGET_TRIPLET $ENV{VCPKG_DEFAULT_TRIPLET} CACHE STRING "")
 endif()
 
@@ -79,8 +79,13 @@ if(MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w44986")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w44987")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w44988")
-elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX
-       OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+elseif(CMAKE_COMPILER_IS_GNUCC
+       OR
+       CMAKE_COMPILER_IS_GNUCXX
+       OR
+       CMAKE_CXX_COMPILER_ID
+       STREQUAL
+       "Clang")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -fsigned-char -Wshadow")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra -Wpedantic -Wcast-qual")
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Winline")
@@ -88,8 +93,12 @@ endif()
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
-  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
-    "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+  set_property(CACHE CMAKE_BUILD_TYPE
+               PROPERTY STRINGS
+                        "Debug"
+                        "Release"
+                        "MinSizeRel"
+                        "RelWithDebInfo")
 endif()
 
 set(CLANG_TIDY_EXECUTABLE "clang-tidy" CACHE STRING "clang-tidy")
@@ -115,50 +124,59 @@ else()
 endif()
 
 if(NOT TARGET uninstall)
-  configure_file(
-      ${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in
-      ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
-      IMMEDIATE @ONLY)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in
+                 ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
+                 IMMEDIATE
+                 @ONLY)
 
   add_custom_target(uninstall
-      COMMAND ${CMAKE_COMMAND} -P
-      ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+                    COMMAND ${CMAKE_COMMAND} -P
+                            ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 endif()
 
 if(${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
   export(TARGETS FILE ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Targets.cmake)
 endif()
 
-file(WRITE ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake
+file(
+  WRITE
+    ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake
     "include(CMakeFindDependencyMacro)\n"
     "include(\${CMAKE_CURRENT_LIST_DIR}/${CMAKE_PROJECT_NAME}Targets.cmake)\n")
 
 add_subdirectory(modules)
-# add_subdirectory(apps)
-# add_subdirectory(doc)
+add_subdirectory(unit-test)
+
+# add_subdirectory(apps) add_subdirectory(doc)
 
 # option(UNIT_TEST "Run unit tests" ON)
 
 # if(UNIT_TEST AND (${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR}))
-#   add_subdirectory(unit-test)
-# endif()
+# add_subdirectory(unit-test) endif()
 
 install(FILES ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake
         DESTINATION lib/cmake/${CMAKE_PROJECT_NAME})
 
-install(EXPORT ${CMAKE_PROJECT_NAME}Targets NAMESPACE hvr::
+install(EXPORT ${CMAKE_PROJECT_NAME}Targets
+        NAMESPACE hvr::
         DESTINATION lib/cmake/${CMAKE_PROJECT_NAME})
 
 if(NOT TARGET install-app)
-  add_custom_target(install-app COMMAND
-                    "${CMAKE_COMMAND}" -DCMAKE_INSTALL_COMPONENT=install-app
-                    -P "${CMAKE_BINARY_DIR}/cmake_install.cmake")
+  add_custom_target(install-app
+                    COMMAND "${CMAKE_COMMAND}"
+                            -DCMAKE_INSTALL_COMPONENT=install-app -P
+                            "${CMAKE_BINARY_DIR}/cmake_install.cmake")
 endif()
 
-file(GLOB_RECURSE ALL_FILES modules/*.cpp modules/*.h
-                            modules/*.cu modules/*.cuh
-                            apps/*.cpp apps/*.h
-                            unit-test/*cpp unit-test/*.h)
+file(GLOB_RECURSE ALL_FILES
+                  modules/*.cpp
+                  modules/*.h
+                  modules/*.cu
+                  modules/*.cuh
+                  apps/*.cpp
+                  apps/*.h
+                  unit-test/*cpp
+                  unit-test/*.h)
 
 set(CLANG_FORMAT_EXECUTABLE "clang-format" CACHE STRING "clang-format")
 
