@@ -14,6 +14,8 @@ namespace ImageIO
 bool ReadExiv(const std::string &inp_file,
               std::map<std::string, std::string> &exiv_data)
 {
+  Exiv2::XmpProperties::registerNs("hvr_imageio", "hvr");
+
   // Read exiv metadata
   Exiv2::Image::UniquePtr exiv_img = Exiv2::ImageFactory::open(inp_file);
   exiv_img->readMetadata();
@@ -26,6 +28,8 @@ bool ReadExiv(const std::string &inp_file,
     exiv_data.insert(
         std::pair<std::string, std::string>(it->key(), it->value().toString()));
   }
+
+  Exiv2::XmpParser::terminate();
 
   return true;
 }
@@ -44,14 +48,16 @@ bool WriteImageExiv(const std::string &out_file,
                     const cv::Mat &img,
                     const std::map<std::string, std::string> &exiv_data)
 {
+  Exiv2::XmpProperties::registerNs("hvr_imageio", "hvr");
+
   // This will get the file extension from the out file
   std::string file_ext = out_file.substr(out_file.find('.'), out_file.size());
-  Exiv2::XmpData xmpData;
+  Exiv2::XmpData inpXmpData;
 
-  // map to XMPData
+  // map to XMPData (Key should start with Xmp.hvr)
   for (auto &it : exiv_data)
   {
-    xmpData[it.first] = it.second;
+    inpXmpData[it.first] = it.second;
   }
 
   std::vector<uchar> cvbuff;
@@ -62,7 +68,7 @@ bool WriteImageExiv(const std::string &out_file,
 
   if (exiv_img.get() != nullptr)
   {
-    exiv_img->setXmpData(xmpData);
+    exiv_img->setXmpData(inpXmpData);
     exiv_img->writeMetadata();
 
     // copy the library buffer to buff
@@ -84,6 +90,8 @@ bool WriteImageExiv(const std::string &out_file,
   {
     return false;
   }
+
+  Exiv2::XmpParser::terminate();
 
   return true;
 }
