@@ -146,6 +146,7 @@ file(
 
 add_subdirectory(modules)
 add_subdirectory(unit-test)
+add_subdirectory(apps)
 
 # add_subdirectory(apps) add_subdirectory(doc)
 
