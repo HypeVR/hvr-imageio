@@ -29,11 +29,11 @@ HVR_IMAGEIO_DLL bool ReadExiv(const std::string &inp_file,
 /**
  * @brief      Reads an image exiv.
  *
- * @param[in]  inp_file     The inp file
+ * @param[in]  inp_file     The input file path
  * @param[in]  imread_flag  The opencv imread flag
  * @param      exiv_data    The exiv data
  *
- * @return     { return image in opencv Mat format }
+ * @return     return image in opencv Mat
  */
 HVR_IMAGEIO_DLL cv::Mat ReadImageExiv(
     const std::string &inp_file,
@@ -43,13 +43,13 @@ HVR_IMAGEIO_DLL cv::Mat ReadImageExiv(
 /**
  * @brief      Writes an image exiv.
  *
- * @param[in]  out_file   The out file
+ * @param[in]  out_file   The output file path
  * @param[in]  img        The image
  * @param[in]  exiv_data  The exiv data(Key should start with Xmp.hvr as we are
  * registering namespace hvr)
  *
- * @return     { returns the status of write op, true if success, false
- * otherwise }
+ * @return     returns the status of write op, true if success, false
+ * otherwise
  */
 HVR_IMAGEIO_DLL bool WriteImageExiv(
     const std::string &out_file,
