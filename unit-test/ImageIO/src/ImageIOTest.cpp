@@ -1,4 +1,4 @@
-// Copyright 2019 Achal Shah
+// Copyright 2019 HypeVR
 
 #include "ImageIOTest.h"
 

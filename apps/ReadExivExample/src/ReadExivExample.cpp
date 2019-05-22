@@ -1,4 +1,4 @@
-// Copyright 2015 Jason Juang
+// Copyright 2019 HypeVR
 
 HVR_WINDOWS_DISABLE_ALL_WARNING
 #include <mpi.h>

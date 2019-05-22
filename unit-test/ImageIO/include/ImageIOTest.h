@@ -1,4 +1,4 @@
-// Copyright 2019 Achal Shah
+// Copyright 2019 HypeVR
 
 #ifndef UNIT_TEST_IMAGEIO_INCLUDE_IMAGEIOTEST_H_
 #define UNIT_TEST_IMAGEIO_INCLUDE_IMAGEIOTEST_H_
