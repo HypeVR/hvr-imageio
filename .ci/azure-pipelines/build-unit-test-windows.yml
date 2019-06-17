@@ -19,9 +19,17 @@ jobs:
       VCPKG_LOCAL_URL: 'C:\vcpkg-hypevr.zip'
       VCPKG_ROOT: 'C:\vcpkg-hypevr'
       VCPKG_DEFAULT_TRIPLET: 'x64-windows'
+      MPI_REMOTE_URL: 'https://vcpkg.s3-us-west-2.amazonaws.com/common/msmpisdk.msi'
+      MPI_LOCAL_URL: 'C:\msmpisdk.msi'
     steps:
       - script: set
         displayName: 'Print Environment Variables'
+      - script: | 
+          curl %MPI_REMOTE_URL% --output %MPI_LOCAL_URL%
+        displayName: 'Download MPI installer'
+      - script: |
+          msiexec.exe /i %MPI_LOCAL_URL% /qn
+        displayName: 'Install MPI'
       - script: |
           curl %VCPKG_REMOTE_URL% --output %VCPKG_LOCAL_URL%
         displayName: 'Download HypeVR Prebuilt VCPKG'
