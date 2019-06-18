@@ -29,10 +29,8 @@ jobs:
         displayName: 'Download MPI installer'
       - script: |
           msiexec.exe /i %MPI_LOCAL_URL% /qb
-        displayName: 'Install MPI'
-      - script: | 
           set
-        displayName: 'Print Environment Variables'
+        displayName: 'Install MPI' 
       - script: |
           curl %VCPKG_REMOTE_URL% --output %VCPKG_LOCAL_URL%
         displayName: 'Download HypeVR Prebuilt VCPKG'
