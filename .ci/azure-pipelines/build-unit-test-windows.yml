@@ -28,7 +28,7 @@ jobs:
           curl %MPI_REMOTE_URL% --output %MPI_LOCAL_URL%
         displayName: 'Download MPI installer'
       - script: |
-          msiexec.exe /a %MPI_LOCAL_URL% /qn
+          msiexec.exe /i %MPI_LOCAL_URL% /qn
         displayName: 'Install MPI'
       - script: | 
           set
