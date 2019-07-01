@@ -1,3 +1,4 @@
 Source: hvr-imageio
 Version: 0.0.0.2 
+Build-Depends: exiv2
 Description: HypeVR image read/write library
