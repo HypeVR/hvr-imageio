@@ -23,12 +23,6 @@ jobs:
     steps:
       - script: set
         displayName: 'Print Environment Variables'
-      - script: | 
-          curl %MPI_REMOTE_URL% --output %MPI_LOCAL_URL%
-        displayName: 'Download MPI installer'
-      - script: |
-          msiexec.exe /i %MPI_LOCAL_URL% /qn
-        displayName: 'Install MPI'
       - script: |
           curl %VCPKG_REMOTE_URL% --output %VCPKG_LOCAL_URL%
         displayName: 'Download HypeVR Prebuilt VCPKG'
@@ -38,7 +32,7 @@ jobs:
         displayName: 'Decompress Prebuilt VCPKG'
       - script: |
           mkdir %BUILD_DIR% && cd %BUILD_DIR%
-          cmake $(Build.SourcesDirectory) -A x64 -DBUILD_TESTS=ON  
+          cmake $(Build.SourcesDirectory) -A x64
         displayName: 'CMake Configuration'
       - script: cd %BUILD_DIR% && cmake --build . --config Release
         displayName: 'Build Library'
