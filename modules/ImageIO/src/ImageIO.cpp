@@ -14,8 +14,6 @@ namespace ImageIO
 bool ReadExiv(const std::string &inp_file,
               std::map<std::string, std::string> &exiv_data)
 {
-  Exiv2::XmpProperties::registerNs("hvr_imageio", "hvr");
-
   // Read exiv metadata
   Exiv2::Image::UniquePtr exiv_img = Exiv2::ImageFactory::open(inp_file);
   exiv_img->readMetadata();
