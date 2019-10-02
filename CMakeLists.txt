@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.11)
 
 if(WIN32)
-  set(CMAKE_TOOLCHAIN_FILE $ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
+  set(CMAKE_TOOLCHAIN_FILE
+      $ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
       CACHE STRING "")
   set(VCPKG_TARGET_TRIPLET $ENV{VCPKG_DEFAULT_TRIPLET} CACHE STRING "")
 endif()
@@ -80,12 +81,8 @@ if(MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w44987")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w44988")
 elseif(CMAKE_COMPILER_IS_GNUCC
-       OR
-       CMAKE_COMPILER_IS_GNUCXX
-       OR
-       CMAKE_CXX_COMPILER_ID
-       STREQUAL
-       "Clang")
+       OR CMAKE_COMPILER_IS_GNUCXX
+       OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -fsigned-char -Wshadow")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra -Wpedantic -Wcast-qual")
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Winline")
@@ -94,11 +91,7 @@ endif()
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
   set_property(CACHE CMAKE_BUILD_TYPE
-               PROPERTY STRINGS
-                        "Debug"
-                        "Release"
-                        "MinSizeRel"
-                        "RelWithDebInfo")
+               PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
 set(CLANG_TIDY_EXECUTABLE "clang-tidy" CACHE STRING "clang-tidy")
@@ -125,8 +118,7 @@ endif()
 
 if(NOT TARGET uninstall)
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in
-                 ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
-                 IMMEDIATE
+                 ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake IMMEDIATE
                  @ONLY)
 
   add_custom_target(uninstall
@@ -138,11 +130,9 @@ if(${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
   export(TARGETS FILE ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Targets.cmake)
 endif()
 
-file(
-  WRITE
-    ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake
-    "include(CMakeFindDependencyMacro)\n"
-    "include(\${CMAKE_CURRENT_LIST_DIR}/${CMAKE_PROJECT_NAME}Targets.cmake)\n")
+file(WRITE ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake
+     "include(CMakeFindDependencyMacro)\n"
+     "include(\${CMAKE_CURRENT_LIST_DIR}/${CMAKE_PROJECT_NAME}Targets.cmake)\n")
 
 add_subdirectory(modules)
 add_subdirectory(unit-test)
@@ -169,16 +159,16 @@ if(NOT TARGET install-app)
                             "${CMAKE_BINARY_DIR}/cmake_install.cmake")
 endif()
 
-file(GLOB_RECURSE ALL_FILES
-                  modules/*.cpp
-                  modules/*.h
-                  modules/*.cu
-                  modules/*.cuh
-                  apps/*.cpp
-                  apps/*.h
-                  unit-test/*cpp
-                  unit-test/*.h)
+file(GLOB_RECURSE SRC_FILES modules/*.cpp modules/*.h modules/*.cu modules/*.cuh
+     apps/*.cpp apps/*.h unit-test/*cpp unit-test/*.h)
+file(GLOB_RECURSE CMAKE_FILES modules/*CMakeLists.txt apps/*CMakeLists.txt
+     unit-test/*CMakeLists.txt)
+list(APPEND CMAKE_FILES ${CMAKE_SOURCE_DIR}/CMakeLists.txt)
 
 set(CLANG_FORMAT_EXECUTABLE "clang-format" CACHE STRING "clang-format")
+set(CMAKE_FORMAT_EXECUTABLE "cmake-format" CACHE STRING "cmake-format")
 
-add_custom_target(format COMMAND ${CLANG_FORMAT_EXECUTABLE} -i ${ALL_FILES})
+add_custom_target(format
+                  COMMAND ${CLANG_FORMAT_EXECUTABLE} -i ${SRC_FILES}
+                  COMMAND ${CMAKE_FORMAT_EXECUTABLE} --max-subargs-per-line 10
+                          -i ${CMAKE_FILES})

@@ -23,9 +23,8 @@ set_property(TARGET ImageIOTest PROPERTY FOLDER ${CMAKE_PROJECT_NAME}/unit-test)
 if(MSVC)
   add_custom_command(
     TARGET ImageIOTest POST_BUILD
-    COMMAND ${CMAKE_COMMAND}
-            -E
-            copy_directory ${PROJECT_SOURCE_DIR}/data/ImageIO
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${PROJECT_SOURCE_DIR}/data/ImageIO
             ${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/data/ImageIO)
 
 elseif((CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -40,7 +39,6 @@ elseif((CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     FILE_PERMISSIONS OWNER_READ OWNER_WRITE GROUP_WRITE GROUP_READ WORLD_READ)")
 
   add_custom_command(TARGET ImageIOTest POST_BUILD
-                     COMMAND ${CMAKE_COMMAND}
-                             -P
+                     COMMAND ${CMAKE_COMMAND} -P
                              ${CMAKE_CURRENT_BINARY_DIR}/imageiodata.cmake)
 endif()

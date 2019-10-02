@@ -21,16 +21,12 @@ source_group("src" FILES ${PROJECT_SRCS})
 find_package(OpenCV REQUIRED)
 find_package(exiv2 REQUIRED)
 
-add_library(${PROJECT_NAME}
-            SHARED
-            ${PROJECT_SRCS}
-            ${PROJECT_INCS}
-            ${PROJECT_INFO})
+add_library(${PROJECT_NAME} SHARED ${PROJECT_SRCS} ${PROJECT_INCS}
+                                   ${PROJECT_INFO})
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_14)
 
-target_compile_definitions(${PROJECT_NAME}
-                           PUBLIC
+target_compile_definitions(${PROJECT_NAME} PUBLIC
                            HVR_WINDOWS_DISABLE_ALL_WARNING=${DISABLE}
                            HVR_WINDOWS_ENABLE_ALL_WARNING=${ENABLE})
 
@@ -63,5 +59,4 @@ export(TARGETS ${PROJECT_NAME}
        FILE ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Targets.cmake)
 
 file(APPEND ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake
-            "find_dependency(exiv2 REQUIRED)\n"
-            "find_dependency(OpenCV REQUIRED)\n")
+     "find_dependency(exiv2 REQUIRED)\n" "find_dependency(OpenCV REQUIRED)\n")
