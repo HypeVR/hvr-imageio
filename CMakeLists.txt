@@ -133,15 +133,18 @@ file(WRITE ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake
      "include(\${CMAKE_CURRENT_LIST_DIR}/${CMAKE_PROJECT_NAME}Targets.cmake)\n")
 
 add_subdirectory(modules)
-add_subdirectory(unit-test)
-add_subdirectory(apps)
 
-# add_subdirectory(apps) add_subdirectory(doc)
+option(BUILD_APPS "Build apps" ON)
 
-# option(UNIT_TEST "Run unit tests" ON)
+if(BUILD_APPS)
+  add_subdirectory(apps)
+endif()
 
-# if(UNIT_TEST AND (${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR}))
-# add_subdirectory(unit-test) endif()
+option(BUILD_UNIT_TEST "Build unit tests" ON)
+
+if(BUILD_UNIT_TEST)
+  add_subdirectory(unit-test)
+endif()
 
 install(FILES ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake
         DESTINATION lib/cmake/${CMAKE_PROJECT_NAME})
